@@ -1,10 +1,15 @@
 const canvas = document.querySelector("#game");
 const game = canvas.getContext('2d');
+const cartel = document.querySelector(".cartel-container");
+const gameContainer = document.querySelector('.game-container');
+const title = document.querySelector("#title");
+let cartelTitle = document.querySelector("#cartel-title");
 
 const btnUp = document.querySelector("#up");
 const btnDown = document.querySelector('#down');
 const btnRight = document.querySelector('#right');
 const btnLeft = document.querySelector('#left');
+const btnReset = document.querySelector('#reset-button');
 
 const spanLives = document.querySelector('#vidas');
 const spanTime = document.querySelector('#tiempo');
@@ -15,7 +20,8 @@ btnDown.addEventListener('click', goDown);
 btnLeft.addEventListener('click', goLeft);
 btnRight.addEventListener('click', goRight);
 btnUp.addEventListener('click', goUp);
-window.addEventListener('keydown', moverTeclas)
+window.addEventListener('keydown', moverTeclas);
+btnReset.addEventListener('click', recargar);
 
 let canvasSize;
 let elementSize;
@@ -38,7 +44,18 @@ let timeInterval;
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
+function recargar () {
+    location.reload();
+}
+
+function fixNumber (n){
+    return Number(n.toFixed(2))
+}
+
+// esta función la puedo usar en todas las variables con números
+
 function setCanvasSize () {
+
     if(window.innerHeight > window.innerWidth){
         canvasSize = window.innerWidth * 0.7;
     } else {
@@ -126,7 +143,8 @@ function movePlayer () {
     });
 
     if (bombCollision) {
-        repeatLevel();
+        game.fillText(emojis['BOMB_COLLISION'], playerPosition.x, playerPosition.y);
+        setTimeout(()=>{repeatLevel();},300);
     }
 
     game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
@@ -138,7 +156,6 @@ function levelWin() {
 }
 
 function gameWin() {
-    console.log('Terminaste el juego!');
     clearInterval(timeInterval);
 
     let recordTime = localStorage.getItem('record_time');
@@ -155,12 +172,19 @@ function gameWin() {
         localStorage.setItem('record_time', playerTime);
         pResult.innerHTML = 'Primer record! Supéralo!';
     }
-
+    cartel.classList.remove('inactive');
+    gameContainer.classList.add('inactive');
+    title.classList.add('inactive');
+    cartelTitle.textContent = "Gantaste el juego! 🐰";
 }
 
 function repeatLevel(){
     lives--;
     if (lives <= 0) {
+        cartel.classList.remove('inactive');
+        gameContainer.classList.add('inactive');
+        title.classList.add('inactive');
+        cartelTitle.innerText = "Perdiste tus vidas :(";
         level = 0;
         lives = 3;
         timeStart = undefined;
@@ -229,5 +253,7 @@ function moverTeclas (evento){
         case'ArrowLeft': goLeft();
         break;
         default: console.log("no funciona");
+        break;
     }
 }
+
