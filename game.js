@@ -40,6 +40,7 @@ let lives = 3;
 let timeStart;
 let timePlayer;
 let timeInterval;
+// let cantidadNiveles = maps.length;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -160,13 +161,18 @@ function gameWin() {
 
     let recordTime = localStorage.getItem('record_time');
     let playerTime = Date.now() - timeStart;
+    // let niveles = localStorage.setItem('cantidad_niveles', cantidadNiveles);
 
     if (recordTime) {
+        // if (niveles != cantidadNiveles) {
+        //     localStorage.setItem('record_time', playerTime);
+        //     pResult.innerHTML = 'Primer record! Supéralo!';
+        // }
         if (recordTime >= playerTime){
             localStorage.setItem('record_time', playerTime);
-            pResult.innerHTML = 'Superaste el record!';
+            pResult.innerHTML = 'Felicitaciones! Superaste el record!';
         } else {
-            pResult.innerHTML = 'No superaste el record :(';
+            pResult.innerHTML = 'Pero... no superaste el record :(';
         }
     } else {
         localStorage.setItem('record_time', playerTime);
